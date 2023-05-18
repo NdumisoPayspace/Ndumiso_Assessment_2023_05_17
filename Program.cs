@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 internal class Program
 {
@@ -9,15 +10,13 @@ internal class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
-        builder.Services.AddHttpClient("RapidAPI", client => 
+        builder.Services.AddHttpClient("OpenAI", client => 
         {
             //store this securely
-            var apiKey = "2eb9f8c55dmsh44510842ea0a32fp162bb4jsn8efacccb48af";
+            var apiKey = "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";
 
-            //move this to program.cs
-            client.BaseAddress = new Uri("https://openai80.p.rapidapi.com/");
-            client.DefaultRequestHeaders.Add("X-RapidAPI-Key", apiKey);
-            client.DefaultRequestHeaders.Add("X-RapidAPI-Host", "openai80.p.rapidapi.com");
+            client.BaseAddress = new Uri("https://api.openai.com/v1/");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
         });
 
         var app = builder.Build();
@@ -39,7 +38,7 @@ internal class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
+            pattern: "{controller=OpenAI}/{action=Index}/{id?}");
 
         app.Run();
     }

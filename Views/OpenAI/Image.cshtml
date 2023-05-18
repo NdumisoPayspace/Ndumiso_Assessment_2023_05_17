@@ -1,0 +1,39 @@
+﻿@model Request
+<div>
+    <h1>Generate Image</h1>
+</div>
+<br />
+<div id="form" class="row">
+    @using (Html.BeginForm("Image", "OpenAI", FormMethod.Post))
+    {
+    @(Html.DevExtreme().Form<Request>()
+        .ShowValidationSummary(true)
+        .Items(_ =>
+        {
+            _.AddGroup()
+            .Items(_ =>
+            {
+                _.AddSimpleFor(_ => _.Description);
+            });
+            _.AddButton()
+            .HorizontalAlignment(HorizontalAlignment.Left)
+            .ButtonOptions(_ => _.Text("Submit")
+            .Type(ButtonType.Success)
+            .UseSubmitBehavior(true)
+            );
+        })
+        .FormData(Model)
+        )
+    }
+</div>
+
+@if (ViewBag.Response != null)
+{
+    <hr />
+    <div style="text-align: center;">
+        <h3>@ViewBag.Description</h3>
+        <div style="background-color: rgba(247,247,248); min-height: 50px;">
+            <img src="@ViewBag.Response" alt="Generated Image">
+        </div>
+    </div>
+}

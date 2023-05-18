@@ -1,0 +1,41 @@
+﻿@model Question
+<div>
+    <h1>Open AI Chat</h1>
+</div>
+<br />
+<div id="form" class="row">
+    @using (Html.BeginForm("Chat", "OpenAI", FormMethod.Post))
+    {
+    @(Html.DevExtreme().Form<Question>()
+        .ShowValidationSummary(true)
+        .Items(_ =>
+        {
+            _.AddGroup()
+            .Items(_ =>
+            {
+                _.AddSimpleFor(m => m.UserQuestion);
+            });
+            _.AddButton()
+            .HorizontalAlignment(HorizontalAlignment.Left)
+            .ButtonOptions(_ => _.Text("Submit")
+            .Type(ButtonType.Success)
+            .UseSubmitBehavior(true)
+            );
+        })
+        .FormData(Model)
+        )
+    }
+</div>
+
+@if (ViewBag.Response != null)
+{
+    <hr />
+    <div>
+        <h4>Question</h4>
+        <p>@ViewBag.Question</p>
+        <h4>Answer</h4>
+        <div style="background-color: rgba(247,247,248); min-height: 50px;">
+            <p>@ViewBag.Response</p>
+        </div>
+    </div>
+}

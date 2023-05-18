@@ -72,8 +72,15 @@
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a href="#" class="nav-link active">Home</a></li>
-                    <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
-                    <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="OpenAI" asp-action="Chat">Chat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="OpenAI" asp-action="Editing">Edit Text</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="OpenAI" asp-action="Image">Generate Image</a>
+                    </li>
                 </ul>
             </div>
         </div>
