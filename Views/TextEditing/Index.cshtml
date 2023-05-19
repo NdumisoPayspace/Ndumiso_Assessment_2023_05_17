@@ -1,0 +1,88 @@
+﻿@model Text
+<div>
+    <h1>Open AI Text Editing</h1>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-3 col-sm-6" style="margin-bottom:30px">
+        <h6>History</h6>
+        <div id="data-grid">
+            @(
+                Html.DevExtreme().DataGrid<Ndumiso_Assessment_2023_05_17.Models.Text>()
+                .DataSource(_ => _.Mvc()
+                .Controller("TextWebAPI")
+                .LoadAction("Get")
+                .DeleteAction("Delete")
+                .Key("Id")
+                )
+                .Editing(_ =>
+                {
+                    _.Mode(GridEditMode.Form);
+                    _.RefreshMode(GridEditRefreshMode.Reshape);
+                    _.UseIcons(true);
+                    _.AllowDeleting(true);
+                })
+                .ShowBorders(true)
+                .ShowColumnLines(false)
+                .OnRowClick("onRowClick")
+                .Columns(_ =>
+                {
+                    _.AddFor(_ => _.UserText)
+                    .HeaderCellTemplate("Click on a record to view it.");
+                })
+                )
+        </div>
+    </div>
+    <div class="col-md-9 col-sm-6">
+        @using (Html.BeginForm("Index", "TextEditing", FormMethod.Post))
+        {
+            @(
+                Html.DevExtreme().Form<Text>()
+                .ShowValidationSummary(true)
+                .Items(_ =>
+                {
+                    _.AddGroup()
+                    .Items(_ =>
+                    {
+                        _.AddSimpleFor(_ => _.UserText);
+                        _.AddSimpleFor(_ => _.Task)
+                    .Editor(_ => _.SelectBox().DataSource(new[]
+                    {
+        "Check Spelling",
+        "Paraphrase",
+        "Translate to English"
+                    }));
+                    });
+                    _.AddButton()
+                    .HorizontalAlignment(HorizontalAlignment.Left)
+                    .ButtonOptions(_ => _.Text("Submit")
+                    .Type(ButtonType.Success)
+                    .UseSubmitBehavior(true)
+                    );
+                })
+                .FormData(Model)
+                )
+        }
+        @if (ViewBag.Response != null)
+        {
+            <hr />
+            <div>
+                <h4>Request</h4>
+                <p>@ViewBag.Text</p>
+                <h4>Answer</h4>
+                <div style="background-color: rgba(247,247,248); min-height: 50px;">
+                    <p>@ViewBag.Response</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function onRowClick(e) {
+        var selectedRowData = e.data;
+        var textId = selectedRowData.Id;
+
+        window.location.href = '/TextEditing/Details?Id=' + textId;
+    }
+</script>

@@ -2,29 +2,28 @@
 {
     using DevExtreme.AspNet.Data;
     using DevExtreme.AspNet.Mvc;
-
     using Microsoft.AspNetCore.Mvc;
     using Ndumiso_Assessment_2023_05_17.Interfaces;
 
-    public class ChatWebAPIController : Controller
+    public class TextWebAPIController : Controller
     {
-        private readonly IChatService chatService;
+        private readonly ITextService textService;
 
-        public ChatWebAPIController(IChatService chatService)
+        public TextWebAPIController(ITextService textService)
         {
-            this.chatService = chatService;
+            this.textService = textService;
         }
 
         [HttpGet]
         public object Get(DataSourceLoadOptions loadOptions)
         {
-            return DataSourceLoader.Load(this.chatService.GetAll(), loadOptions);
+            return DataSourceLoader.Load(this.textService.GetAll(), loadOptions);
         }
 
         [HttpDelete]
         public IActionResult Delete(int key)
         {
-            this.chatService.Delete(key);
+            this.textService.Delete(key);
 
             return this.Ok();
         }

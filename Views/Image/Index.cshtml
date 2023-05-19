@@ -1,0 +1,81 @@
+﻿@model Image
+<div>
+    <h1>Open AI Image Generation</h1>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-3 col-sm-6" style="margin-bottom:30px">
+        <h6>History</h6>
+        <div id="data-grid">
+            @(
+                Html.DevExtreme().DataGrid<Ndumiso_Assessment_2023_05_17.Models.Image>()
+                .DataSource(_ => _.Mvc()
+                .Controller("ImageWebAPI")
+                .LoadAction("Get")
+                .DeleteAction("Delete")
+                .Key("Id")
+                )
+                .Editing(_ =>
+                {
+                    _.Mode(GridEditMode.Form);
+                    _.RefreshMode(GridEditRefreshMode.Reshape);
+                    _.UseIcons(true);
+                    _.AllowDeleting(true);
+                })
+                .ShowBorders(true)
+                .ShowColumnLines(false)
+                .OnRowClick("onRowClick")
+                .Columns(_ =>
+                {
+                    _.AddFor(_ => _.Description)
+                    .HeaderCellTemplate("Click on a record to view it.");
+                })
+                )
+        </div>
+    </div>
+    <div class="col-md-9 col-sm-6">
+        <div id="form" class="row">
+            @using (Html.BeginForm("Index", "Image", FormMethod.Post))
+            {
+                @(Html.DevExtreme().Form<Image>()
+                    .ShowValidationSummary(true)
+                    .Items(_ =>
+                    {
+                        _.AddGroup()
+                        .Items(_ =>
+                        {
+                            _.AddSimpleFor(_ => _.Description);
+                        });
+                        _.AddButton()
+                        .HorizontalAlignment(HorizontalAlignment.Left)
+                        .ButtonOptions(_ => _.Text("Submit")
+                        .Type(ButtonType.Success)
+                        .UseSubmitBehavior(true)
+                        );
+                    })
+                    .FormData(Model)
+                    )
+            }
+        </div>
+
+        @if (ViewBag.Response != null)
+        {
+            <hr />
+            <div style="text-align: center;">
+                <h3>@ViewBag.Description</h3>
+                <div style="background-color: rgba(247,247,248); min-height: 50px;">
+                    <img src="@ViewBag.Response" alt="Generated Image">
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function onRowClick(e) {
+        var selectedRowData = e.data;
+        var imageId = selectedRowData.Id;
+
+        window.location.href = '/Image/Details?Id=' + imageId;
+    }
+</script>

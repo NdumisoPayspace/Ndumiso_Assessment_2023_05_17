@@ -1,0 +1,83 @@
+﻿@model Chat
+<div>
+    <h1>Open AI Chat</h1>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-3 col-sm-6" style="margin-bottom:30px">
+        <h6>History</h6>
+        <div id="data-grid">
+            @(
+                Html.DevExtreme().DataGrid<Ndumiso_Assessment_2023_05_17.Models.Chat>()
+                .DataSource(_ => _.Mvc()
+                .Controller("ChatWebAPI")
+                .LoadAction("Get")
+                .DeleteAction("Delete")
+                .Key("Id")
+                )
+                .Editing(_ =>
+                {
+                    _.Mode(GridEditMode.Form);
+                    _.RefreshMode(GridEditRefreshMode.Reshape);
+                    _.UseIcons(true);
+                    _.AllowDeleting(true);
+                })
+                .ShowBorders(true)
+                .ShowColumnLines(false)
+                .OnRowClick("onRowClick")
+                .Columns(_ =>
+                {
+                    _.AddFor(_ => _.UserQuestion)
+                        .HeaderCellTemplate("Click on a record to view it.");
+                })
+            )
+        </div>
+    </div>
+    <div class="col-md-9 col-sm-6">
+        <div id="form" class="row">
+            @using (Html.BeginForm("Index", "Chat", FormMethod.Post))
+            {
+                @(Html.DevExtreme().Form<Chat>()
+                    .ShowValidationSummary(true)
+                    .Items(_ =>
+                    {
+                        _.AddGroup()
+                        .Items(_ =>
+                        {
+                            _.AddSimpleFor(_ => _.UserQuestion);
+                        });
+                        _.AddButton()
+                        .HorizontalAlignment(HorizontalAlignment.Left)
+                        .ButtonOptions(_ => _.Text("Submit")
+                        .Type(ButtonType.Success)
+                        .UseSubmitBehavior(true)
+                        );
+                    })
+                    .FormData(Model)
+                    )
+            }
+        </div>
+
+        @if (ViewBag.Response != null)
+        {
+            <hr />
+            <div>
+                <h4>Question</h4>
+                <p>@ViewBag.Question</p>
+                <h4>Answer</h4>
+                <div style="background-color: rgba(247,247,248); min-height: 50px;">
+                    <p>@ViewBag.Response</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function onRowClick(e) {
+        var selectedRowData = e.data;
+        var chatId = selectedRowData.Id;
+
+        window.location.href = '/Chat/Details?Id=' + chatId;
+    }
+</script>
