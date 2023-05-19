@@ -6,7 +6,7 @@
 
     using FluentValidation;
     using FluentValidation.Results;
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Caching.Memory;
 
@@ -32,7 +32,7 @@
             this.imageService = imageService;
         }
 
-
+        [Authorize]
         public async Task<IActionResult> Index(Image model)
         {
             ValidationResult result = imageValidator.Validate(model);
@@ -83,6 +83,7 @@
             return View();
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Details(int Id)
         {

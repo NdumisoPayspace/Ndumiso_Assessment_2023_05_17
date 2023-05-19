@@ -2,7 +2,7 @@
 {
     using DevExtreme.AspNet.Data;
     using DevExtreme.AspNet.Mvc;
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     using Ndumiso_Assessment_2023_05_17.Interfaces;
@@ -16,12 +16,14 @@
             this.imageService = imageService;
         }
 
+        [Authorize]
         [HttpGet]
         public object Get(DataSourceLoadOptions loadOptions)
         {
             return DataSourceLoader.Load(this.imageService.GetAll(), loadOptions);
         }
 
+        [Authorize]
         [HttpDelete]
         public IActionResult Delete(int key)
         {

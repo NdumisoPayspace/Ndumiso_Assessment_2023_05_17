@@ -33,6 +33,7 @@
 
     <script src="~/js/devextreme/jquery.js"></script>
     <script src="~/js/devextreme/bootstrap.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 
     @* Uncomment to use Globalize for localization *@
     @* Docs: https://docs.devexpress.com/AspNetCore/400577#globalize *@
@@ -71,7 +72,6 @@
 
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a href="#" class="nav-link active">Home</a></li>
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Chat" asp-action="Index">Chat</a>
                     </li>
@@ -83,6 +83,7 @@
                     </li>
                 </ul>
             </div>
+            <partial name="_LoginPartial" />
         </div>
     </nav>
 

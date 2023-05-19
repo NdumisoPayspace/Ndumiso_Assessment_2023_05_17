@@ -5,7 +5,7 @@
 
     using FluentValidation;
     using FluentValidation.Results;
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Caching.Memory;
 
@@ -29,6 +29,7 @@
             this.chatService = chatService;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index(Chat model)
         {
             ValidationResult result = questionValidator.Validate(model);
@@ -80,6 +81,7 @@
             return View();
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Details(int Id)
         {

@@ -6,7 +6,7 @@
 
     using FluentValidation;
     using FluentValidation.Results;
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Caching.Memory;
 
@@ -31,6 +31,7 @@
             this.textService = textService;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index(Text model)
         {
             ValidationResult result = textValidator.Validate(model);
@@ -99,6 +100,7 @@
             return View();
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Details(int Id)
         {

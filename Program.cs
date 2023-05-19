@@ -10,6 +10,9 @@ using Ndumiso_Assessment_2023_05_17.Models;
 using Ndumiso_Assessment_2023_05_17.Services;
 using Ndumiso_Assessment_2023_05_17.Validators;
 
+using Microsoft.AspNetCore.Identity;
+using Ndumiso_Assessment_2023_05_17.Areas.Identity.Data;
+
 internal class Program
 {
     private static void Main(string[] args)
@@ -21,6 +24,11 @@ internal class Program
 
         // Add services to the container.
         builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("AuthDbContextConnection")));
+
+        builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<AuthDbContext>();
 
         builder.Services.AddControllersWithViews().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
@@ -43,6 +51,8 @@ internal class Program
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
         });
 
+ 
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -58,11 +68,15 @@ internal class Program
 
         app.UseRouting();
 
+        app.UseAuthentication();
+
         app.UseAuthorization();
 
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
+
+        app.MapRazorPages();
 
         app.Run();
     }
